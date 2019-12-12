@@ -11,21 +11,18 @@ package com.mitrais.onlinetest.registrationapp.controller;
  * Sincerely Yours, Hooman
  */
 
-import com.mitrais.onlinetest.registrationapp.exception.ResourceNotFoundException;
 import com.mitrais.onlinetest.registrationapp.persistence.entity.User;
-import com.mitrais.onlinetest.registrationapp.persistence.repository.UserRepository;
-import com.mitrais.onlinetest.registrationapp.service.UserService;
+import com.mitrais.onlinetest.registrationapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/v0/api")
+@RequestMapping(value = "/v0/api", produces = "application/json")
 public class UserController {
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -34,21 +31,25 @@ public class UserController {
 
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+                User serviceUser = userService.createUser(user);
+        return serviceUser;
     }
 
     @GetMapping("/users/{id}")
+    @ResponseBody
     public User getUserById(@PathVariable(value = "id") Long userId) {
         return userService.getUserById(userId);
     }
 
     @PutMapping("/users/{id}")
+    @ResponseBody
     public User updateUser(@PathVariable(value = "id") Long userId,
                            @RequestBody User userDetails) {
         return userService.updateUser(userId, userDetails);
     }
 
     @DeleteMapping("/users/{id}")
+    @ResponseBody
     public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
