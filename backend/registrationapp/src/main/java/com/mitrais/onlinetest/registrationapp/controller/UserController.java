@@ -14,6 +14,7 @@ package com.mitrais.onlinetest.registrationapp.controller;
 import com.mitrais.onlinetest.registrationapp.exception.ResourceNotFoundException;
 import com.mitrais.onlinetest.registrationapp.persistence.entity.User;
 import com.mitrais.onlinetest.registrationapp.persistence.repository.UserRepository;
+import com.mitrais.onlinetest.registrationapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,48 +22,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("v0/api")
+@RequestMapping("/v0/api")
 public class UserController {
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userService.findAll();
     }
 
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+        return userService.createUser(user);
     }
 
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable(value = "id") Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        return userService.getUserById(userId);
     }
 
     @PutMapping("/users/{id}")
     public User updateUser(@PathVariable(value = "id") Long userId,
                            @RequestBody User userDetails) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
-//        user.setTitle(userDetails.getTitle());
-//        user.setContent(userDetails.getContent());
-
-        User updateduser = userRepository.save(user);
-        return updateduser;
+        return userService.updateUser(userId, userDetails);
     }
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
-        userRepository.delete(user);
-
+        userService.deleteUser(userId);
         return ResponseEntity.ok().build();
     }
 }
