@@ -12,9 +12,7 @@ package com.mitrais.onlinetest.registrationapp.persistence.entity;
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -22,8 +20,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
@@ -57,6 +56,7 @@ public class User {
     @CreatedDate
     private Date createdAt;
 
+    @NonNull
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
