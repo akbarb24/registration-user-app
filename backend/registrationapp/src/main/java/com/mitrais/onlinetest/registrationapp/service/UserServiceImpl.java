@@ -12,18 +12,23 @@ package com.mitrais.onlinetest.registrationapp.service;
  */
 
 import com.mitrais.onlinetest.registrationapp.exception.ResourceNotFoundException;
-import com.mitrais.onlinetest.registrationapp.persistence.entity.User;
-import com.mitrais.onlinetest.registrationapp.persistence.repository.UserRepository;
+import com.mitrais.onlinetest.registrationapp.entity.User;
+import com.mitrais.onlinetest.registrationapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Validator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    Validator validator;
 
     @Override
     public List<User> findAll() {
@@ -32,7 +37,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        return userRepository.save(user);
+        try {
+            System.out.println("SAVE!");
+//        Set<ConstraintViolation<User>> validate = validator.validate(user);
+//        System.out.println(validate);
+            return userRepository.saveAndFlush(user);
+        }catch (Exception e){
+
+            System.out.println("HAH!: " + e.getMessage());
+            return null;
+        }
+
     }
 
     @Override
@@ -62,5 +77,27 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         userRepository.delete(user);
+    }
+
+    @Override
+    public boolean isEmailUnique(Object value, String fieldName) throws Exception {
+        if (!fieldName.equals("email")) {
+            throw new Exception("Field name not supported");
+        }
+
+        String email = value.toString();
+        Optional<User> userList = userRepository.findByEmail(email);
+        return !userList.isPresent();
+    }
+
+    @Override
+    public boolean isMobileNumberUnique(Object value, String fieldName) throws Exception {
+        if (!fieldName.equals("mobileNumber")) {
+            throw new Exception("Field name not supported");
+        }
+
+        String mobileNumber = value.toString();
+        Optional<User> userList = userRepository.findByMobileNumber(mobileNumber);
+        return !userList.isPresent();
     }
 }

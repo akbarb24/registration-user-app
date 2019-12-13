@@ -12,12 +12,14 @@ package com.mitrais.onlinetest.registrationapp.service;
  */
 
 
+import com.mitrais.onlinetest.registrationapp.validation.UniqueEmailValidation;
 import com.mitrais.onlinetest.registrationapp.exception.ResourceNotFoundException;
-import com.mitrais.onlinetest.registrationapp.persistence.entity.User;
+import com.mitrais.onlinetest.registrationapp.entity.User;
+import com.mitrais.onlinetest.registrationapp.validation.UniqueMobileNumberValidation;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UniqueEmailValidation, UniqueMobileNumberValidation {
     List<User> findAll();
     User createUser(User user);
     User getUserById(Long userId) throws ResourceNotFoundException;
