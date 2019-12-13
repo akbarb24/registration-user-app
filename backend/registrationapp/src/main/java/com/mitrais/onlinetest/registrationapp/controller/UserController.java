@@ -11,11 +11,13 @@ package com.mitrais.onlinetest.registrationapp.controller;
  * Sincerely Yours, Hooman
  */
 
-import com.mitrais.onlinetest.registrationapp.persistence.entity.User;
+import com.mitrais.onlinetest.registrationapp.entity.User;
 import com.mitrais.onlinetest.registrationapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -30,8 +32,9 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
+    public User createUser(@Validated @RequestBody User user) {
                 User serviceUser = userService.createUser(user);
+
         return serviceUser;
     }
 
