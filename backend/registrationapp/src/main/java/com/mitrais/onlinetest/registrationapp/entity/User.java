@@ -1,4 +1,4 @@
-package com.mitrais.onlinetest.registrationapp.persistence.entity;
+package com.mitrais.onlinetest.registrationapp.entity;
 /*
  * Dear Maintainer,
  *
@@ -12,12 +12,21 @@ package com.mitrais.onlinetest.registrationapp.persistence.entity;
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import com.mitrais.onlinetest.registrationapp.service.UserService;
+import com.mitrais.onlinetest.registrationapp.validation.UniqueEmail;
+import com.mitrais.onlinetest.registrationapp.validation.UniqueMobileNumber;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Data
@@ -33,12 +42,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Mobile number is required")
+    @Pattern(regexp = "^(^\\+62\\s?|^0)(\\d{3,4}-?){2}\\d{3,4}$", message = "Invalid Mobile Number Format")
+    @UniqueMobileNumber(service = UserService.class, fieldName = "mobileNumber", message= "Mobile Number is already used")
     @Column(nullable = false, unique = true)
     private String mobileNumber;
 
+    @NotEmpty(message = "First name is required")
     @Column(nullable = false)
     private String firstName;
 
+    @NotEmpty(message = "Last name is required")
     @Column(nullable = false)
     private String lastName;
 
@@ -48,6 +62,9 @@ public class User {
     @Column(length = 1)
     private String gender;
 
+    @NotEmpty(message = "Email is required")
+    @Email(message = "Invalid email format")
+    @UniqueEmail(service = UserService.class, fieldName = "email", message= "Email is already used")
     @Column(nullable = false, unique = true)
     private String email;
 
