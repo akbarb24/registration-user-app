@@ -11,9 +11,8 @@ package com.mitrais.onlinetest.registrationapp.service;
  * Sincerely Yours, Hooman
  */
 
-import com.mitrais.onlinetest.registrationapp.exception.ResourceNotFoundException;
-import com.mitrais.onlinetest.registrationapp.persistence.entity.User;
-import com.mitrais.onlinetest.registrationapp.persistence.repository.UserRepository;
+import com.mitrais.onlinetest.registrationapp.entity.User;
+import com.mitrais.onlinetest.registrationapp.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
