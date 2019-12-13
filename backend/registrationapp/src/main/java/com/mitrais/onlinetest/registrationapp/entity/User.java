@@ -13,6 +13,7 @@ package com.mitrais.onlinetest.registrationapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mitrais.onlinetest.registrationapp.service.UserService;
+import com.mitrais.onlinetest.registrationapp.service.UserValidationService;
 import com.mitrais.onlinetest.registrationapp.validation.UniqueEmail;
 import com.mitrais.onlinetest.registrationapp.validation.UniqueMobileNumber;
 import lombok.AllArgsConstructor;
@@ -44,7 +45,7 @@ public class User {
 
     @NotEmpty(message = "Mobile number is required")
     @Pattern(regexp = "^(^\\+62\\s?|^0)(\\d{3,4}-?){2}\\d{3,4}$", message = "Invalid Mobile Number Format")
-    @UniqueMobileNumber(service = UserService.class, fieldName = "mobileNumber", message= "Mobile Number is already used")
+    @UniqueMobileNumber(service = UserValidationService.class, fieldName = "mobileNumber", message= "Mobile Number is already used")
     @Column(nullable = false, unique = true)
     private String mobileNumber;
 
@@ -64,7 +65,7 @@ public class User {
 
     @NotEmpty(message = "Email is required")
     @Email(message = "Invalid email format")
-    @UniqueEmail(service = UserService.class, fieldName = "email", message= "Email is already used")
+    @UniqueEmail(service = UserValidationService.class, fieldName = "email", message= "Email is already used")
     @Column(nullable = false, unique = true)
     private String email;
 

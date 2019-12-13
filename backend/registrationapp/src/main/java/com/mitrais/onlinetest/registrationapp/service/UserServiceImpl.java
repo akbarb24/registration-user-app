@@ -78,26 +78,4 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
     }
-
-    @Override
-    public boolean isEmailUnique(Object value, String fieldName) throws Exception {
-        if (!fieldName.equals("email")) {
-            throw new Exception("Field name not supported");
-        }
-
-        String email = value.toString();
-        Optional<User> userList = userRepository.findByEmail(email);
-        return !userList.isPresent();
-    }
-
-    @Override
-    public boolean isMobileNumberUnique(Object value, String fieldName) throws Exception {
-        if (!fieldName.equals("mobileNumber")) {
-            throw new Exception("Field name not supported");
-        }
-
-        String mobileNumber = value.toString();
-        Optional<User> userList = userRepository.findByMobileNumber(mobileNumber);
-        return !userList.isPresent();
-    }
 }

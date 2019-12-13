@@ -19,7 +19,7 @@ import com.mitrais.onlinetest.registrationapp.validation.UniqueMobileNumberValid
 
 import java.util.List;
 
-public interface UserService extends UniqueEmailValidation, UniqueMobileNumberValidation {
+public interface UserService {
     List<User> findAll();
     User createUser(User user);
     User getUserById(Long userId) throws ResourceNotFoundException;
