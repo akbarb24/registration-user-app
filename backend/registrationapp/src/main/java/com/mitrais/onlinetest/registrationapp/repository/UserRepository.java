@@ -1,4 +1,4 @@
-package com.mitrais.onlinetest.registrationapp.persistence.repository;
+package com.mitrais.onlinetest.registrationapp.repository;
 /*
  * Dear Maintainer,
  *
@@ -11,10 +11,15 @@ package com.mitrais.onlinetest.registrationapp.persistence.repository;
  * Sincerely Yours, Hooman
  */
 
-import com.mitrais.onlinetest.registrationapp.persistence.entity.User;
+import com.mitrais.onlinetest.registrationapp.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
+    Optional<User> findByMobileNumber(String mobileNumber);
 }
