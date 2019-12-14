@@ -44,7 +44,7 @@ public class User {
     private Long id;
 
     @NotEmpty(message = "Mobile number is required")
-    @Pattern(regexp = "^(^\\+62\\s?|^0)(\\d{3,4}-?){2}\\d{3,4}$", message = "Invalid Mobile Number Format")
+    @Pattern(regexp = "^(^62\\s?)(\\d{3,4}-?){2}\\d{3,4}$", message = "Invalid Indonesian Mobile Number Format\n(Start with '62' and followed by 9-12 digits)")
     @UniqueMobileNumber(service = UserValidationService.class, fieldName = "mobileNumber", message= "Mobile Number is already used")
     @Column(nullable = false, unique = true)
     private String mobileNumber;
