@@ -11,6 +11,7 @@ package com.mitrais.onlinetest.registrationapp.exception;
  * Sincerely Yours, Hooman
  */
 
+import net.minidev.json.JSONObject;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,9 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
         HashMap<String, String> hashError = new HashMap<>();
         hashError.put("Error", ex.getMessage());
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Internal Server Error!", hashError);
+        JSONObject json = new JSONObject();
+        json.putAll(hashError);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Internal Server Error!", json);
         return new ResponseEntity(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -42,7 +45,9 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public final ResponseEntity<Object> handleUserNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         HashMap<String, String> hashError = new HashMap<>();
         hashError.put(ex.getFieldName(), ex.getResourceName());
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Resource Not Found!", hashError);
+        JSONObject json = new JSONObject();
+        json.putAll(hashError);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Resource Not Found!", json);
         return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
@@ -58,7 +63,10 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
             errors.put(error.getObjectName(), error.getDefaultMessage());
         }
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Validation Error!", errors);
+        JSONObject json = new JSONObject();
+        json.putAll(errors);
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Validation Error!", json);
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

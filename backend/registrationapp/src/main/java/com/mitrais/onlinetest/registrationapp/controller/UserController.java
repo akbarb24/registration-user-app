@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/v0/api", produces = "application/json")
 public class UserController {
@@ -32,6 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
+    @ResponseBody
     public User createUser(@Validated @RequestBody User user) {
                 User serviceUser = userService.createUser(user);
 

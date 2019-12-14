@@ -11,6 +11,7 @@ package com.mitrais.onlinetest.registrationapp.entity;
  * Sincerely Yours, Hooman
  */
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mitrais.onlinetest.registrationapp.service.UserService;
 import com.mitrais.onlinetest.registrationapp.service.UserValidationService;
@@ -57,6 +58,7 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
+    @JsonFormat(pattern="DD.MM.YYYY")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 

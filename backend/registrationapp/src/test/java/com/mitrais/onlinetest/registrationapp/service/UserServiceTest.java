@@ -41,10 +41,8 @@ public class UserServiceTest {
                 .firstName("Richard")
                 .lastName("Hendricks")
                 .email("this@mail.com")
-                .mobileNumber("08080")
+                .mobileNumber("087834000808")
                 .gender("M")
-                .createdAt(new Date())
-                .updatedAt(new Date())
                 .build();
 
         Mockito.when(userRepository.save(user)).thenReturn(user);
@@ -62,7 +60,7 @@ public class UserServiceTest {
                 .firstName("Richard")
                 .lastName("Hendricks")
                 .email("this@mail.com")
-                .mobileNumber("08080")
+                .mobileNumber("087834000808")
                 .gender("M")
                 .createdAt(new Date())
                 .updatedAt(new Date())
@@ -82,7 +80,7 @@ public class UserServiceTest {
                 .firstName("User 1")
                 .lastName("Awesome")
                 .email("this@mail.com")
-                .mobileNumber("08080")
+                .mobileNumber("087834000808")
                 .gender("M")
                 .createdAt(new Date())
                 .updatedAt(new Date())

@@ -12,17 +12,19 @@ package com.mitrais.onlinetest.registrationapp.exception;
  */
 
 import lombok.Data;
+import net.minidev.json.JSONObject;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Data
 public class ExceptionResponse {
     private Date timestamp;
     private String message;
-    private HashMap<String, String> errorDetails;
+    private JSONObject errorDetails;
 
-    public ExceptionResponse(Date timestamp, String message, HashMap<String, String> errorDetails) {
+    public ExceptionResponse(Date timestamp, String message, JSONObject errorDetails) {
         super();
         this.timestamp = timestamp;
         this.message = message;
