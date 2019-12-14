@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="vue-date-dropdown.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+  <title>Registration App</title>
+</head>
+
+<body>
+  <div class="container" id='vueapp'>
+    <div class="col-md-8 offset-md-2 mt-2 bg-grey p-5">
+      <form>
+        <fieldset :disabled="disable">
+          <h2 class="mb-4">Registration</h2>
+          <span class="text-danger" v-if="errors.mobileNumber" v-text="errors.mobileNumber"></span>
+          <input required class="form-control" type="text" name="mobileNumber" v-model="form.mobileNumber"
+            placeholder="Mobile Number">
+          </br>
+          <span class="text-danger" v-if="errors.firstName" v-text="errors.firstName"></span>
+          <input required class="form-control" type="text" name="firstName" v-model="form.firstName" placeholder="First Name">
+          </br>
+          <span class="text-danger" v-if="errors.lastName" v-text="errors.lastName"></span>
+          <input required class="form-control" type="text" name="lastName" v-model="form.lastName" placeholder="Last Name">
+          </br>
+          <label>Date of Birth</label>
+          <date-dropdown id="mySelect" min="2000" v-model="form.birthDate"></date-dropdown>
+          <br>
+          <label>Male</label>
+          <input type="radio" value="M" v-model="form.gender">
+          <label>Female</label>
+          <input type="radio" value="F" v-model="form.gender">
+          </br>
+          <span class="text-danger" v-if="errors.email" v-text="errors.email"></span>
+          <input required class="form-control" type="email" name="email" v-model="form.email" placeholder="Email">
+          </br>
+          <input class="btn bt-purple btn-lg btn-block" type="button" @click="createContact()" value="Register">
+        </fieldset :disabled="disable">
+      </form>
+    </div>
+    <div v-if="successFlag" class="mt-12 col-md-10 offset-md-1">
+      <button class=" btn btn-primary btn-lg btn-block bt-purple" @click="directToLoginPage()">Login</button>
+    </div>
+    <div v-else class="col-md-10 offset-md-1 mt-2 p-12 bg-purple align-center" style="height: 150px;">
+      <h1 class="text-center p-4">Footer</h1>
+    </div>
+
+  </div>
+  </div>
+
+  <script>
+    Vue.use(DateDropdown)
+    var app = new Vue({
+      el: '#vueapp',
+      data: {
+        disable: false,
+        successFlag: false,
+        form: {
+          firstName: '',
+          lastName: '',
+          email: '',
+          mobileNumber: '',
+          gender: '',
+          birthDate: ''
+        },
+        errors: {
+          email: null,
+          firstName: null,
+          lastName: null,
+          mobileNumber: null
+        }
+      },
+      mounted: function () {
+        console.log('Hello from Vue!')
+        // this.getContacts()
+      },
+
+      methods: {
+        createContact: function () {
+          this.successFlag = true
+          console.log(this.errors)
+          console.log("Create user!")
+          
+
+          // this.success = true;
+          axios({
+              method: 'post',
+              url: 'http://localhost:8081/v0/api/users',
+              data: this.form,
+              config: {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }
+            })
+            .then(response => {
+              //handle success
+              // successHandler()
+              
+              this.successFlag = true
+              this.disable = true
+            })
+            .catch(error => {
+              this.successFlag = false
+              console.log(this.successFlag)
+              console.log(this.error)
+              let eds = error.response.data.errorDetails
+              this.errors["email"] = eds.email
+              this.errors["firstName"] = eds.firstName
+              this.errors["lastName"] = eds.lastName
+              this.errors["mobileNumber"] = eds.mobileNumber
+            });
+        },
+        directToLoginPage: function(){
+          window.location.href = 'login.html'
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
