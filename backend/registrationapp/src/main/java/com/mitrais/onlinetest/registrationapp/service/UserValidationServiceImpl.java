@@ -29,7 +29,6 @@ public class UserValidationServiceImpl implements UserValidationService {
             throw new Exception("Field name not supported");
         }
 
-        System.out.println("this");
         String email = value.toString();
         Optional<User> userList = userRepository.findByEmail(email);
         return !userList.isPresent();

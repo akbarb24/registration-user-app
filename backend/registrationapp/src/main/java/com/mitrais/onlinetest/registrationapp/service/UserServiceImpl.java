@@ -37,17 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        try {
-            System.out.println("SAVE!");
-//        Set<ConstraintViolation<User>> validate = validator.validate(user);
-//        System.out.println(validate);
-            return userRepository.saveAndFlush(user);
-        }catch (Exception e){
-
-            System.out.println("HAH!: " + e.getMessage());
-            return null;
-        }
-
+        return userRepository.save(user);
     }
 
     @Override

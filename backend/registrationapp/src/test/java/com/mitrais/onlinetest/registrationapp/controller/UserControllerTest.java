@@ -21,11 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,14 +97,17 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createUserTest() throws Exception {
+    public void createUserWithFullContentTest() throws Exception {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
 
         User user = User.builder()
                 .firstName("User1")
                 .lastName("Awesome")
                 .email("this@mail.com")
-                .mobileNumber("08080")
+                .mobileNumber("62878340000000")
                 .gender("M")
+                .birthDate(formatter.parse("1999-12-01"))
                 .build();
 
         Mockito.when(userService.createUser(any(User.class))).thenReturn(user);
@@ -117,13 +123,16 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createUserWithoutEmailTest() throws Exception {
+    public void createUserWithoutFirstNameTest() throws Exception {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
 
         User user = User.builder()
-                .firstName("User1")
                 .lastName("Awesome")
-                .mobileNumber("08080")
+                .email("this@mail.com")
+                .mobileNumber("62878340000000")
                 .gender("M")
+                .birthDate(formatter.parse("1999-12-01"))
                 .build();
 
         Mockito.when(userService.createUser(any(User.class))).thenReturn(user);
@@ -134,7 +143,83 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorDetails.email").value("Email is required"));
+                .andExpect(jsonPath("$.message").value("Validation Error!"))
+                .andExpect(jsonPath("$.errorDetails.firstName").value("First name is required"));
+    }
+
+    @Test
+    public void createUserWithoutLastNameTest() throws Exception {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+
+        User user = User.builder()
+                .firstName("User1")
+                .email("this@mail.com")
+                .mobileNumber("62878340000000")
+                .gender("M")
+                .birthDate(formatter.parse("1999-12-01"))
+                .build();
+
+        Mockito.when(userService.createUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform( MockMvcRequestBuilders
+                .post("/v0/api/users")
+                .content(asJsonString(user))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Validation Error!"))
+                .andExpect(jsonPath("$.errorDetails.lastName").value("Last name is required"));
+    }
+
+    @Test
+    public void createUserWithoutGenderTest() throws Exception {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+
+        User user = User.builder()
+                .firstName("User1")
+                .lastName("Awesome")
+                .email("this@mail.com")
+                .mobileNumber("62878340000000")
+                .birthDate(formatter.parse("1999-12-01"))
+                .build();
+
+        Mockito.when(userService.createUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform( MockMvcRequestBuilders
+                .post("/v0/api/users")
+                .content(asJsonString(user))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lastName").value("Awesome"))
+                .andExpect(jsonPath("$.firstName").value("User1"));
+    }
+
+    @Test
+    public void createUserWithoutBirthDateTest() throws Exception {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+
+        User user = User.builder()
+                .firstName("User1")
+                .lastName("Awesome")
+                .email("this@mail.com")
+                .mobileNumber("62878340000000")
+                .gender("M")
+                .build();
+
+        Mockito.when(userService.createUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform( MockMvcRequestBuilders
+                .post("/v0/api/users")
+                .content(asJsonString(user))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lastName").value("Awesome"))
+                .andExpect(jsonPath("$.firstName").value("User1"));
     }
 
     public static String asJsonString(final Object obj) {
