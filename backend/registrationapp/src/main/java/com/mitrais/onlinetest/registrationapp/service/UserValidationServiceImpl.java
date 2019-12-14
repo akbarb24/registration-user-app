@@ -31,7 +31,7 @@ public class UserValidationServiceImpl implements UserValidationService {
 
         String email = value.toString();
         Optional<User> userList = userRepository.findByEmail(email);
-        return userList.isPresent();
+        return !userList.isPresent();
     }
 
     @Override
